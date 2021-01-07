@@ -56,7 +56,7 @@ def get_book_info(file_path, fixes):
     Read author (artist) and title information from the ID3 tags on the MP3 file. Return as a dictionary.
     """
     book = eyed3.load(file_path)
-    author = book.tag.artist
+    author = book.tag.artist or "Unknown"
     title = book.tag.title
     if fixes["authors"] and author in fixes["authors"]:
         author = fixes["authors"][author]

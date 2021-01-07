@@ -145,9 +145,9 @@ def main(input_path, output_path):
 
 
 @click.command()
-@click.option("-s", "--source", help="Source path", default="/home/trevor/OpenAudible/mp3/")
+@click.option("-s", "--source", help="Source path", default="/mnt/nas/media/OpenAudible/mp3/")
 @click.option("-d", "--destination", help="Destination path",
-              default="/home/trevor/Audiobooks/CloudStation/")
+              default="/mnt/nas/media/Audiobooks/")
 def cli(source, destination):
     main(source, destination)
 

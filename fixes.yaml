@@ -1,6 +1,5 @@
 ---
 
-authors:
-    "B.V. Larson": "B. V. Larson"
-
-titles:
+ignore:
+    - "Your First Listen"
+    - "Galaxy's Edge"

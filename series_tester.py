@@ -1,7 +1,3 @@
-"""
-I want to update this script so that it sorts books by series if there is one listed in the
-Album field sorted by the CD field.
-"""
 import os
 import sys
 import shutil
@@ -15,6 +11,12 @@ import yaml
 
 
 SAFE_CHARS = f"-_.() {string.ascii_letters}{string.digits}"
+YAML_TEST = {
+    "authors": {
+        "B.V. Larson": "B. V. Larson",
+    },
+    "titles": {},
+}
 
 
 logging.basicConfig(
@@ -56,9 +58,13 @@ def get_book_info(file_path):
     book = eyed3.load(file_path)
     author = book.tag.artist or "Unknown"
     title = book.tag.title
+    album = book.tag.album
+    disc_num = book.tag.disc_num
     data = {
         "author": clean_name(author),
         "title": clean_name(title),
+        "album": album,
+        "disc_num": disc_num,
     }
     return data
 
@@ -119,23 +125,19 @@ def copy_book(src, book_path, data):
 
 
 def main(input_path, output_path):
-    fixes = read_fixes()
     if input_path.endswith("/"):
         input_path = input_path[:-1]
     books = get_file_list(input_path, "mp3")
     book_count = len(books)
     log.info(f"Processing {book_count} books")
     index = 0
+    count = 0
     for book in books:
         index += 1
-        data = get_book_info(book, fixes)
-        if output_path.endswith("/"):
-            output_path = output_path[:-1]
-        # author_path = make_author_dir(output_path, data)
-        book_path = make_book_dir(output_path, data)
-        copy_book(book, book_path, data)
-        if index % 10 == 0:
-            log.info(f"Processed {index} of {book_count}")
+        data = get_book_info(book)
+        if data["album"] == data["title"]:
+            count += 1
+    print(f"books without series info: {count}")
 
 
 @click.command()

@@ -139,7 +139,8 @@ def new_book_update(books_data, data, destination):
         data["series"] = input("Enter in the series name: ")
         series_num = input("Enter in the series number: ")
         if series_num is None:
-            data["series_num"] = 0
+            series_num = 0
+        data["series_num"] = series_num
     data = book_dest_info(data, destination)
     books_data[data['title']] = data
     print(data)

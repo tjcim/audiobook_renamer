@@ -127,6 +127,18 @@ def is_new(books_data, data):
     return False
 
 
+def json_record_exists(books_data, data):
+    """
+    Checks if the book data is already in the books_data json file.
+
+    Returns True if exists otherwise False
+    """
+    if books_data[data["title"]]:
+        log.debug("Book exists in json file.")
+        return True
+    return False
+
+
 def new_book_update(books_data, data, destination):
     log.info(f"Current book data:"
              f"\n\tTitle: {data['title']}"
@@ -224,9 +236,14 @@ def main(source, destination):
         data = get_book_info(book, destination)
         if is_new(books_data, data):
             new_book_update(books_data, data, destination)
-        make_series_dir(data)
-        make_book_dir(data)
-        copy_book(data)
+        # Prioritize info from books.json.
+        if json_record_exists(books_data, data):
+            desired_data = books_data[data["title"]]
+        else:
+            desired_data = data
+        make_series_dir(desired_data)
+        make_book_dir(desired_data)
+        copy_book(desired_data)
         if index % 10 == 0:
             log.info(f"Processed {index} of {book_count}")
     write_json_file(source, books_data)

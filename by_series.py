@@ -99,7 +99,13 @@ def book_dest_info(data, destination):
         series_dest_path = os.path.join(destination, series)
     # Add series number if book is part of a series
     if series != "None" and series_num != 0:
-        book_path = os.path.join(series_dest_path, data["title"] + f"-{series_num}")
+        # Check if the last character ends with the book number already
+        if data["title"].endswith(str(series_num)):
+            # If the book title already ends with the series number do not add it
+            book_path = os.path.join(series_dest_path, data["title"])
+        else:
+            # If the book title does not end with the series number, add it.
+            book_path = os.path.join(series_dest_path, data["title"] + f"-{series_num}")
     else:
         book_path = os.path.join(series_dest_path, data["title"])
     file_name = f"{data['title']}.mp3"
